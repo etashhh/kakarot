@@ -65,13 +65,16 @@ namespace MemoryOperations {
     // @custom:group Stack Memory Storage and Flow operations.
     // @custom:stack_produced_elements 1
     // @return Updated execution context.
-    func exec_pc{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
-        ctx: model.ExecutionContext*
-    ) -> model.ExecutionContext* {
+    func exec_pc{
+        syscall_ptr: felt*,
+        pedersen_ptr: HashBuiltin*,
+        range_check_ptr,
+        bitwise_ptr: BitwiseBuiltin*,
+    }(ctx: model.ExecutionContext*) -> model.ExecutionContext* {
         alloc_locals;
         %{ print("0x58 - PC") %}
+        let pc = Helpers.to_uint256(ctx.program_counter - 1);
 
-        let pc = Helpers.to_uint256(ctx.program_counter);
         let stack: model.Stack* = Stack.push(ctx.stack, pc);
 
         // Update context stack.
